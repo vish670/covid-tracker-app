@@ -17,20 +17,6 @@ export const fetchData = async (country) => {
   }
 };
 
-export const fetchChartData = async () => {
-  try {
-    const { data } = await axios.get(`${url}/daily`);
-    const modifiedData = data.map((d) => ({
-      confirmed: d.confirmed.total,
-      deaths: d.deaths.total,
-      date: d.reportDate,
-    }));
-    return modifiedData;
-  } catch (error) {
-    return error;
-  }
-};
-
 export const fetchCountryData = async () => {
   try {
     const {

@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
-import { fetchChartData } from "../../api";
 import styles from "./charts.module.css";
+import axios from "axios";
+
+const url = "https://covid19.mathdro.id/api";
 
 const Charts = ({ data, country }) => {
   const [dailyData, setDailyData] = useState([]);
 
   useEffect(() => {
-    const fetchedDailyData = async () => {
-      setDailyData(await fetchChartData());
+    const fetchChartData = async () => {
+      try {
+        const { data } = await axios.get(`${url}/daily`);
+        const modifiedData = data.map((d) => ({
+          confirmed: d.confirmed.total,
+          deaths: d.deaths.total,
+          date: d.reportDate,
+        }));
+        setDailyData(modifiedData);
+      } catch (error) {
+        return error;
+      }
     };
-    console.log(dailyData);
-    fetchedDailyData();
+    fetchChartData();
   }, []);
 
   const barChart = data.confirmed ? (
